@@ -1,0 +1,718 @@
+ScreenManager:
+    TelaSplash:
+    TelaLogin:
+    TelaHomeTecnico:
+    TelaLista:
+    TelaDetalhe:
+    TelaEstoqueTecnico:
+    TelaManutencaoEta:
+    TelaMinhasSolicitacoes:
+    TelaEnviarComprovante:
+    TelaAnaliseEta:
+    TelaLavagemFiltro:
+
+<TelaSplash>:
+    name: "splash"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: app.c_fundo
+        Widget:
+        Image:
+            source: "assets/logo_saae.png"
+            size_hint: 0.7, 0.7
+            pos_hint: {"center_x": 0.5}
+        Widget:
+
+<TelaLista>:
+    name: "lista"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: app.c_fundo
+
+        MDTopAppBar:
+            title: "Meus chamados"
+            md_bg_color: 0.043, 0.165, 0.357, 1
+            left_action_items: [["arrow-left", lambda x: setattr(root.manager, "current", "home_tecnico")]]
+            right_action_items: [["refresh", lambda x: root.carregar()]]
+
+        MDLabel:
+            id: aviso_offline
+            text: ""
+            halign: "center"
+            theme_text_color: "Custom"
+            text_color: 0.86, 0.15, 0.15, 1
+            size_hint_y: None
+            height: self.texture_size[1] + dp(10) if self.text else 0
+            padding: dp(5), dp(5)
+
+        ScrollView:
+            MDList:
+                id: lista_chamados
+
+
+<TelaDetalhe>:
+    name: "detalhe"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: app.c_fundo
+
+        MDTopAppBar:
+            title: "Detalhe do chamado"
+            md_bg_color: 0.043, 0.165, 0.357, 1
+            left_action_items: [["arrow-left", lambda x: setattr(root.manager, "current", "lista")]]
+
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                padding: "20dp"
+                spacing: "15dp"
+                adaptive_height: True
+
+                MDLabel:
+                    id: texto_tipo
+                    text: "Tipo:"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    id: texto_prioridade
+                    text: "Prioridade:"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    id: texto_descricao
+                    text: "Problema relatado:"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    id: texto_status
+                    text: "Status:"
+                    bold: True
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                BotaoPrimario:
+                    id: botao_iniciar
+                    text: "INICIAR ATENDIMENTO"
+                    on_release: root.iniciar()
+
+                MDLabel:
+                    text: "— Solicitar material (aguarda aprovação) —"
+                    bold: True
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                Seletor:
+                    id: spinner_catalogo
+                    text: "(carregando catálogo...)"
+                    values: []
+                    size_hint_y: None
+                    height: "44dp"
+
+                MDBoxLayout:
+                    size_hint_y: None
+                    height: "44dp"
+                    spacing: "8dp"
+                    Campo:
+                        id: campo_quantidade_solicitar
+                        hint_text: "Qtd"
+                        input_filter: "float"
+                        multiline: False
+                        size_hint_x: 0.4
+                    BotaoPrimario:
+                        id: botao_solicitar
+                        text: "Solicitar"
+                        size_hint_x: 0.6
+                        on_release: root.solicitar_material()
+
+                MDLabel:
+                    text: "— Fechamento do chamado —"
+                    bold: True
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    text: "Checklist da situação encontrada:"
+                    bold: True
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDBoxLayout:
+                    size_hint_y: None
+                    height: "36dp"
+                    CheckBox:
+                        id: chk_vazamento
+                        size_hint_x: None
+                        width: "36dp"
+                    MDLabel:
+                        text: "Vazamento visível confirmado"
+
+                MDBoxLayout:
+                    size_hint_y: None
+                    height: "36dp"
+                    CheckBox:
+                        id: chk_registro_ok
+                        size_hint_x: None
+                        width: "36dp"
+                    MDLabel:
+                        text: "Registro/válvula funcionando normalmente"
+
+                MDBoxLayout:
+                    size_hint_y: None
+                    height: "36dp"
+                    CheckBox:
+                        id: chk_tubulacao_dano
+                        size_hint_x: None
+                        width: "36dp"
+                    MDLabel:
+                        text: "Tubulação com dano visível"
+
+                MDBoxLayout:
+                    size_hint_y: None
+                    height: "36dp"
+                    CheckBox:
+                        id: chk_hidrometro_dano
+                        size_hint_x: None
+                        width: "36dp"
+                    MDLabel:
+                        text: "Hidrômetro danificado ou violado"
+
+                MDBoxLayout:
+                    size_hint_y: None
+                    height: "36dp"
+                    CheckBox:
+                        id: chk_acesso_liberado
+                        size_hint_x: None
+                        width: "36dp"
+                    MDLabel:
+                        text: "Acesso ao local estava liberado"
+
+                MDBoxLayout:
+                    size_hint_y: None
+                    height: "36dp"
+                    CheckBox:
+                        id: chk_ja_resolvido
+                        size_hint_x: None
+                        width: "36dp"
+                    MDLabel:
+                        text: "Problema já havia sido resolvido antes da chegada"
+
+                MDBoxLayout:
+                    size_hint_y: None
+                    height: "36dp"
+                    CheckBox:
+                        id: chk_retorno_necessario
+                        size_hint_x: None
+                        width: "36dp"
+                    MDLabel:
+                        text: "Necessário retorno com equipe/equipamento adicional"
+
+                MDLabel:
+                    text: "Materiais utilizados (nome + quantidade):"
+                    bold: True
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                Campo:
+                    id: campo_materiais
+                    hint_text: "Ex: 1 registro 3/4, 2m cano PVC, fita veda-rosca"
+                    multiline: True
+
+                MDLabel:
+                    text: "Materiais do estoque (baixa automática):"
+                    bold: True
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                Seletor:
+                    id: spinner_estoque
+                    text: "(carregando estoque...)"
+                    values: []
+                    size_hint_y: None
+                    height: "44dp"
+
+                MDBoxLayout:
+                    size_hint_y: None
+                    height: "44dp"
+                    spacing: "8dp"
+                    Campo:
+                        id: campo_quantidade_estoque
+                        hint_text: "Qtd"
+                        input_filter: "float"
+                        multiline: False
+                        size_hint_x: 0.4
+                    BotaoPrimario:
+                        text: "Adicionar"
+                        size_hint_x: 0.6
+                        on_release: root.adicionar_material_estoque()
+
+                MDLabel:
+                    id: texto_estoque_selecionado
+                    text: "Nenhum item do estoque adicionado"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                Campo:
+                    id: campo_solucao
+                    hint_text: "Descreva o que foi feito"
+                    multiline: True
+
+                BotaoSecundario:
+                    text: "TIRAR FOTO"
+                    on_release: root.tirar_foto()
+
+                MDLabel:
+                    id: texto_fotos
+                    text: "Nenhuma foto tirada ainda"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                BotaoPrimario:
+                    id: botao_fechar
+                    text: "FECHAR CHAMADO"
+                    on_release: root.fechar_chamado()
+
+
+<TelaHomeTecnico>:
+    name: "home_tecnico"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: app.c_fundo
+
+        MDTopAppBar:
+            title: "SAAE de Chalé — Técnico"
+            md_bg_color: 0.043, 0.165, 0.357, 1
+            right_action_items: [["key-variant", lambda x: root.trocar_senha()], ["logout", lambda x: root.sair()]]
+
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                adaptive_height: True
+                padding: dp(16)
+                spacing: dp(14)
+                MDLabel:
+                    id: saudacao
+                    text: ""
+                    font_style: "H6"
+                    bold: True
+                    theme_text_color: "Custom"
+                    text_color: app.c_escuro
+                    size_hint_y: None
+                    height: self.texture_size[1] + dp(2)
+                MDLabel:
+                    text: app.novidades_texto
+                    font_style: "Caption"
+                    bold: True
+                    theme_text_color: "Custom"
+                    text_color: app.c_vermelho
+                    size_hint_y: None
+                    height: self.texture_size[1] + dp(16) if self.text else 0
+                    text_size: self.width - dp(20), None
+                    padding: dp(10), dp(8)
+                    canvas.before:
+                        Color:
+                            rgba: 0.984, 0.918, 0.910, 1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [dp(9)]
+                MDGridLayout:
+                    cols: 2
+                    adaptive_height: True
+                    spacing: dp(10)
+                    CartaoAcao:
+                        icone: "wrench"
+                        titulo: "Chamados"
+                        texto: app.chamados_card_texto
+                        on_release: root.ir_chamados()
+                    CartaoAcao:
+                        icone: "package-variant"
+                        titulo: "Estoque / ETA"
+                        texto: "Materiais, análises e lavagens"
+                        on_release: root.ir_estoque()
+
+
+<TelaEstoqueTecnico>:
+    name: "estoque_tecnico"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: app.c_fundo
+
+        MDTopAppBar:
+            title: "Estoque / ETA"
+            md_bg_color: 0.043, 0.165, 0.357, 1
+            left_action_items: [["arrow-left", lambda x: setattr(root.manager, "current", "home_tecnico")]]
+            right_action_items: [["refresh", lambda x: root.carregar()]]
+
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                padding: "20dp"
+                spacing: "12dp"
+                adaptive_height: True
+
+                MDLabel:
+                    text: "Meu estoque atual (recebido da sede)"
+                    bold: True
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDList:
+                    id: lista_estoque_tecnico
+
+                MDLabel:
+                    text: "— Solicitar insumo pra ETA / reparo —"
+                    bold: True
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                Seletor:
+                    id: spinner_insumo
+                    text: "(carregando...)"
+                    values: []
+                    size_hint_y: None
+                    height: "44dp"
+
+                MDBoxLayout:
+                    size_hint_y: None
+                    height: "44dp"
+                    spacing: "8dp"
+                    Campo:
+                        id: campo_quantidade_pedido
+                        hint_text: "Qtd"
+                        input_filter: "float"
+                        multiline: False
+                        size_hint_x: 0.4
+                    BotaoPrimario:
+                        id: botao_solicitar_insumo
+                        text: "Solicitar"
+                        size_hint_x: 0.6
+                        on_release: root.solicitar_insumo()
+
+                Widget:
+                    size_hint_y: None
+                    height: "10dp"
+
+                BotaoPrimario:
+                    text: "ANÁLISE DIÁRIA DA ETA"
+                    pos_hint: {"center_x": 0.5}
+                    on_release: root.ir_analise_eta()
+
+                BotaoSecundario:
+                    text: "LAVAGEM DO FILTRO"
+                    pos_hint: {"center_x": 0.5}
+                    on_release: root.ir_lavagem_filtro()
+
+                BotaoPrimario:
+                    text: "MINHAS SOLICITAÇÕES"
+                    pos_hint: {"center_x": 0.5}
+                    on_release: root.ir_minhas_solicitacoes()
+
+                BotaoPrimario:
+                    text: "REGISTRAR MANUTENÇÃO DA ETA"
+                    pos_hint: {"center_x": 0.5}
+                    on_release: root.ir_manutencao_eta()
+
+
+<TelaManutencaoEta>:
+    name: "manutencao_eta"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: app.c_fundo
+
+        MDTopAppBar:
+            title: "Manutenção da ETA"
+            md_bg_color: 0.043, 0.165, 0.357, 1
+            left_action_items: [["arrow-left", lambda x: setattr(root.manager, "current", "estoque_tecnico")]]
+
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: "25dp"
+            spacing: "15dp"
+
+            MDLabel:
+                text: "Tipo de manutenção:"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            Seletor:
+                id: spinner_tipo_manutencao
+                text: "Limpeza de tanque"
+                values: ["Limpeza de tanque", "Verificação de cloro/dosagem", "Manutenção de bomba/equipamento", "Outro"]
+                size_hint_y: None
+                height: "48dp"
+
+            MDLabel:
+                text: "Descreva o que foi feito:"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            Campo:
+                id: campo_descricao_manutencao
+                hint_text: "Ex: Limpeza completa do tanque de decantação, sem irregularidades"
+                multiline: True
+
+            Widget:
+                size_hint_y: None
+                height: "10dp"
+
+            BotaoPrimario:
+                id: botao_registrar_manutencao
+                text: "Registrar"
+                pos_hint: {"center_x": 0.5}
+                on_release: root.registrar()
+
+
+<TelaMinhasSolicitacoes>:
+    name: "minhas_solicitacoes"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: app.c_fundo
+
+        MDTopAppBar:
+            title: "Minhas solicitações"
+            md_bg_color: 0.043, 0.165, 0.357, 1
+            left_action_items: [["arrow-left", lambda x: setattr(root.manager, "current", "estoque_tecnico")]]
+            right_action_items: [["refresh", lambda x: root.carregar()]]
+
+        ScrollView:
+            MDList:
+                id: lista_solicitacoes
+
+
+<TelaEnviarComprovante>:
+    name: "enviar_comprovante"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: app.c_fundo
+
+        MDTopAppBar:
+            title: "Enviar comprovante"
+            md_bg_color: 0.043, 0.165, 0.357, 1
+            left_action_items: [["arrow-left", lambda x: setattr(root.manager, "current", "minhas_solicitacoes")]]
+
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: "25dp"
+            spacing: "15dp"
+
+            MDLabel:
+                text: "Compra direta autorizada — envie a nota fiscal:"
+                size_hint_y: None
+                height: self.texture_size[1]
+                text_size: self.width, None
+
+            MDLabel:
+                text: "Fornecedor onde comprou:"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            Seletor:
+                id: spinner_fornecedor
+                text: "(carregando...)"
+                values: []
+                size_hint_y: None
+                height: "44dp"
+
+            Campo:
+                id: campo_valor_compra
+                hint_text: "Valor da nota fiscal (R$)"
+                input_filter: "float"
+
+            BotaoSecundario:
+                text: "TIRAR FOTO DA NOTA FISCAL"
+                pos_hint: {"center_x": 0.5}
+                on_release: root.tirar_foto_nota()
+
+            MDLabel:
+                id: texto_foto_nota
+                text: "Nenhuma foto tirada ainda"
+                halign: "center"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            Widget:
+                size_hint_y: None
+                height: "10dp"
+
+            BotaoPrimario:
+                id: botao_enviar_comprovante
+                text: "Enviar comprovante"
+                pos_hint: {"center_x": 0.5}
+                on_release: root.enviar()
+
+
+<TelaAnaliseEta>:
+    name: "analise_eta"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: app.c_fundo
+
+        MDTopAppBar:
+            title: "Análise diária da ETA"
+            md_bg_color: 0.043, 0.165, 0.357, 1
+            left_action_items: [["arrow-left", lambda x: setattr(root.manager, "current", "estoque_tecnico")]]
+
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                padding: "20dp"
+                spacing: "10dp"
+                adaptive_height: True
+
+                MDLabel:
+                    text: "Horário da coleta:"
+                    bold: True
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                Seletor:
+                    id: spinner_horario_coleta
+                    text: "06:00"
+                    values: []
+                    size_hint_y: None
+                    height: "44dp"
+
+                MDLabel:
+                    text: "Vazão (L/s)"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                Campo:
+                    id: campo_vazao
+                    input_filter: "float"
+
+                MDLabel:
+                    text: "Turbidez — Bruta / Filtrada / Tratada (NTU)"
+                    bold: True
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                Campo:
+                    id: campo_turbidez_bruta
+                    hint_text: "Bruta"
+                    input_filter: "float"
+                Campo:
+                    id: campo_turbidez_filtrada
+                    hint_text: "Filtrada (meta ≤ 0,5 / máx 1,0 NTU)"
+                    input_filter: "float"
+                Campo:
+                    id: campo_turbidez_tratada
+                    hint_text: "Tratada (máx 5,0 NTU)"
+                    input_filter: "float"
+
+                MDLabel:
+                    text: "pH — Bruta / Tratada"
+                    bold: True
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                Campo:
+                    id: campo_ph_bruta
+                    hint_text: "Bruta"
+                    input_filter: "float"
+                Campo:
+                    id: campo_ph_tratada
+                    hint_text: "Tratada (faixa 6,0–9,5)"
+                    input_filter: "float"
+
+                MDLabel:
+                    text: "Sulfato — dosagem (ml/15s)"
+                    bold: True
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                Campo:
+                    id: campo_sulfato
+                    input_filter: "float"
+
+                MDLabel:
+                    text: "Cloro — Dosagem (ml/15s) / Residual (mg/L)"
+                    bold: True
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                Campo:
+                    id: campo_cloro_dosagem
+                    hint_text: "Dosagem"
+                    input_filter: "float"
+                Campo:
+                    id: campo_cloro_residual
+                    hint_text: "Residual (faixa 0,2–5,0 mg/L)"
+                    input_filter: "float"
+
+                MDLabel:
+                    text: "Cor — Bruta / Tratada (UC)"
+                    bold: True
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                Campo:
+                    id: campo_cor_bruta
+                    hint_text: "Bruta"
+                    input_filter: "float"
+                Campo:
+                    id: campo_cor_tratada
+                    hint_text: "Tratada (máx 15 UC)"
+                    input_filter: "float"
+
+                Campo:
+                    id: campo_observacoes_analise
+                    hint_text: "Observações (opcional)"
+                    multiline: True
+
+                Widget:
+                    size_hint_y: None
+                    height: "10dp"
+
+                BotaoPrimario:
+                    id: botao_registrar_analise
+                    text: "Registrar análise"
+                    pos_hint: {"center_x": 0.5}
+                    on_release: root.registrar()
+
+
+<TelaLavagemFiltro>:
+    name: "lavagem_filtro"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: app.c_fundo
+
+        MDTopAppBar:
+            title: "Lavagem do filtro"
+            md_bg_color: 0.043, 0.165, 0.357, 1
+            left_action_items: [["arrow-left", lambda x: setattr(root.manager, "current", "estoque_tecnico")]]
+
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: "25dp"
+            spacing: "15dp"
+
+            MDLabel:
+                text: "Hora (HH:MM)"
+                size_hint_y: None
+                height: self.texture_size[1]
+            Campo:
+                id: campo_hora_lavagem
+
+            MDLabel:
+                text: "Tempo gasto (minutos)"
+                size_hint_y: None
+                height: self.texture_size[1]
+            Campo:
+                id: campo_tempo_lavagem
+                input_filter: "float"
+
+            MDLabel:
+                text: "Volume gasto (L ou m³, conforme seu padrão)"
+                size_hint_y: None
+                height: self.texture_size[1]
+            Campo:
+                id: campo_volume_lavagem
+                input_filter: "float"
+
+            Widget:
+                size_hint_y: None
+                height: "10dp"
+
+            BotaoPrimario:
+                id: botao_registrar_lavagem
+                text: "Registrar"
+                pos_hint: {"center_x": 0.5}
+                on_release: root.registrar()

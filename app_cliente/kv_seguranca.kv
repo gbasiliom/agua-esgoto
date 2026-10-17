@@ -1,0 +1,158 @@
+#:import dp kivy.metrics.dp
+# Telas de segurança — mesmo kit visual dos apps (Cabecalho, Cartao, Campo, BotaoPrimario…).
+
+<TelaEsqueciSenha>:
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: app.c_fundo
+        Cabecalho:
+            titulo: "Recuperar senha"
+            subtitulo: app.nome_app
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                adaptive_height: True
+                padding: dp(16)
+                spacing: dp(12)
+                Cartao:
+                    padding: dp(18)
+                    spacing: dp(10)
+                    Rotulo:
+                        text: "Esqueci minha senha"
+                        font_style: "H6"
+                        bold: True
+                        text_color: app.c_escuro
+                    Rotulo:
+                        text: "Informe o e-mail ou o telefone do seu cadastro. Enviaremos um código de 6 dígitos para o e-mail da conta."
+                        font_style: "Body2"
+                    Campo:
+                        id: ident
+                        hint_text: "E-mail ou telefone"
+                    Rotulo:
+                        id: msg
+                        text: ""
+                        font_style: "Caption"
+                        text_color: app.c_vermelho
+                    BotaoPrimario:
+                        id: botao
+                        text: "ENVIAR CÓDIGO"
+                        on_release: root.enviar()
+                    BotaoSecundario:
+                        text: "VOLTAR AO LOGIN"
+                        on_release: root.voltar()
+
+<TelaEsqueciCodigo>:
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: app.c_fundo
+        Cabecalho:
+            titulo: "Recuperar senha"
+            subtitulo: app.nome_app
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                adaptive_height: True
+                padding: dp(16)
+                spacing: dp(12)
+                Cartao:
+                    padding: dp(18)
+                    spacing: dp(10)
+                    Rotulo:
+                        text: "Digite o código"
+                        font_style: "H6"
+                        bold: True
+                        text_color: app.c_escuro
+                    Rotulo:
+                        id: explicacao
+                        text: ""
+                        font_style: "Body2"
+                    Campo:
+                        id: codigo
+                        hint_text: "Código de 6 dígitos"
+                        input_filter: "int"
+                        input_type: "number"
+                        max_text_length: 6
+                    Campo:
+                        id: nova
+                        hint_text: "Nova senha"
+                        password: True
+                    Campo:
+                        id: nova2
+                        hint_text: "Repita a nova senha"
+                        password: True
+                    Rotulo:
+                        text: "Mínimo de 8 caracteres, com letra e número. O código vale por 10 minutos."
+                        font_style: "Caption"
+                    Rotulo:
+                        id: msg
+                        text: ""
+                        font_style: "Caption"
+                        text_color: app.c_vermelho
+                    BotaoPrimario:
+                        id: botao
+                        text: "REDEFINIR SENHA"
+                        on_release: root.redefinir()
+                    BotaoSecundario:
+                        id: reenviar
+                        text: "Reenviar código"
+                        on_release: root.reenviar()
+                    BotaoSecundario:
+                        text: "VOLTAR"
+                        on_release: root.voltar()
+
+<TelaTrocarSenha>:
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: app.c_fundo
+        Cabecalho:
+            titulo: "Trocar senha"
+            subtitulo: app.nome_app
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                adaptive_height: True
+                padding: dp(16)
+                spacing: dp(12)
+                Cartao:
+                    padding: dp(18)
+                    spacing: dp(10)
+                    Rotulo:
+                        text: "Nova senha"
+                        font_style: "H6"
+                        bold: True
+                        text_color: app.c_escuro
+                    Rotulo:
+                        id: explicacao
+                        text: ""
+                        font_style: "Body2"
+                    Campo:
+                        id: atual
+                        hint_text: "Senha atual"
+                        password: True
+                    Campo:
+                        id: nova
+                        hint_text: "Nova senha"
+                        password: True
+                    Campo:
+                        id: nova2
+                        hint_text: "Repita a nova senha"
+                        password: True
+                    Rotulo:
+                        text: "Mínimo de 8 caracteres, com letra e número. Evite datas, telefone e sequências."
+                        font_style: "Caption"
+                    Rotulo:
+                        id: msg
+                        text: ""
+                        font_style: "Caption"
+                        text_color: app.c_vermelho
+                    BotaoPrimario:
+                        id: botao
+                        text: "SALVAR NOVA SENHA"
+                        on_release: root.salvar()
+                    BotaoSecundario:
+                        id: cancelar
+                        text: "CANCELAR"
+                        on_release: root.cancelar()
+                    BotaoSecundario:
+                        text: "SAIR DA CONTA"
+                        on_release: root.sair_da_conta()

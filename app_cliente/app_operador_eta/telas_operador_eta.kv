@@ -1,0 +1,164 @@
+ScreenManager:
+    TelaLogin:
+    TelaHome:
+    TelaAnalise:
+    TelaLavagem:
+    TelaHistorico:
+
+<TelaHome>:
+    name: "home"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 1, 1, 1, 1
+        Cabecalho:
+            id: cab
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                adaptive_height: True
+                padding: dp(20)
+                spacing: dp(14)
+                Cartao:
+                    Rotulo:
+                        id: prox_titulo
+                        text: ""
+                        bold: True
+                        text_color: app.c_escuro
+                    Rotulo:
+                        id: prox_texto
+                        text: ""
+                        font_style: "H6"
+                    Rotulo:
+                        id: pendentes
+                        text: ""
+                        font_style: "Caption"
+                BotaoPrimario:
+                    text: "NOVA ANÁLISE (a cada 2 h)"
+                    on_release: root.manager.current = "analise"
+                BotaoPrimario:
+                    text: "LAVAGEM DE FILTRO"
+                    on_release: root.manager.current = "lavagem"
+                BotaoSecundario:
+                    text: "Histórico e pendências"
+                    on_release: root.manager.current = "historico"
+                BotaoSecundario:
+                    text: "Enviar pendências agora"
+                    on_release: root.sincronizar()
+                BotaoSecundario:
+                    text: "Sair"
+                    on_release: root.sair()
+
+<TelaAnalise>:
+    name: "analise"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 1, 1, 1, 1
+        Cabecalho:
+            titulo: "Nova análise da ETA"
+            subtitulo: "Preencha o que foi medido; vírgula ou ponto"
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                adaptive_height: True
+                padding: dp(20)
+                spacing: dp(10)
+                Rotulo:
+                    id: hora
+                    text: ""
+                    bold: True
+                    text_color: app.c_escuro
+                CampoNum:
+                    id: vazao_ls
+                    hint_text: "Vazão (L/s)"
+                CampoNum:
+                    id: turbidez_bruta
+                    hint_text: "Turbidez bruta (NTU)"
+                CampoNum:
+                    id: turbidez_filtrada
+                    hint_text: "Turbidez filtrada (NTU)"
+                CampoNum:
+                    id: turbidez_tratada
+                    hint_text: "Turbidez tratada (NTU)"
+                CampoNum:
+                    id: ph_bruta
+                    hint_text: "pH água bruta"
+                CampoNum:
+                    id: ph_tratada
+                    hint_text: "pH água tratada"
+                CampoNum:
+                    id: cor_bruta
+                    hint_text: "Cor bruta (uC)"
+                CampoNum:
+                    id: cor_tratada
+                    hint_text: "Cor tratada (uC)"
+                CampoNum:
+                    id: cloro_residual
+                    hint_text: "Cloro residual (mg/L)"
+                CampoNum:
+                    id: sulfato_dosagem
+                    hint_text: "Dosagem de sulfato"
+                CampoNum:
+                    id: cloro_dosagem
+                    hint_text: "Dosagem de cloro"
+                Campo:
+                    id: observacoes
+                    hint_text: "Observações"
+                Rotulo:
+                    id: msg
+                    text: ""
+                    text_color: app.c_vermelho
+                BotaoPrimario:
+                    text: "REGISTRAR"
+                    on_release: root.registrar()
+                BotaoSecundario:
+                    text: "Voltar"
+                    on_release: root.manager.current = "home"
+
+<TelaLavagem>:
+    name: "lavagem"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 1, 1, 1, 1
+        Cabecalho:
+            titulo: "Lavagem de filtro"
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: dp(20)
+            spacing: dp(10)
+            Rotulo:
+                id: hora
+                text: ""
+                bold: True
+                text_color: app.c_escuro
+            CampoNum:
+                id: tempo
+                hint_text: "Tempo gasto (min)"
+            CampoNum:
+                id: volume
+                hint_text: "Volume de água gasto (m³)"
+            Rotulo:
+                id: msg
+                text: ""
+                text_color: app.c_vermelho
+            BotaoPrimario:
+                text: "REGISTRAR"
+                on_release: root.registrar()
+            BotaoSecundario:
+                text: "Voltar"
+                on_release: root.manager.current = "home"
+            Widget:
+
+<TelaHistorico>:
+    name: "historico"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 1, 1, 1, 1
+        Cabecalho:
+            titulo: "Histórico"
+            subtitulo: "Pendentes, recusados e últimos lançamentos"
+        ScrollView:
+            MDList:
+                id: lista
+        BotaoSecundario:
+            text: "Voltar"
+            on_release: root.manager.current = "home"

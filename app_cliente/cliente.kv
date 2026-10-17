@@ -1,0 +1,558 @@
+ScreenManager:
+
+<TelaSplash>:
+    name: "splash"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 0.961, 0.973, 0.988, 1
+        Widget:
+        Image:
+            source: "assets/logo_saae.png"
+            size_hint: 0.7, 0.7
+            pos_hint: {"center_x": 0.5}
+        Widget:
+
+<TelaLogin>:
+    name: "login"
+    FloatLayout:
+        canvas.before:
+            Color:
+                rgba: 0.86, 0.86, 0.86, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        Image:
+            source: "assets/logo_saae.png"
+            size_hint: None, None
+            size: "480dp", "480dp"
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            opacity: 0.06
+
+        MDBoxLayout:
+            orientation: "vertical"
+            size_hint: 0.85, None
+            height: "460dp"
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            padding: "30dp"
+            spacing: "10dp"
+            radius: [12, 12, 12, 12]
+            md_bg_color: 0.82, 0.82, 0.82, 1
+
+            MDLabel:
+                text: "SIGA"
+                font_style: "H5"
+                bold: True
+                halign: "center"
+                theme_text_color: "Custom"
+                text_color: 0.043, 0.165, 0.357, 1
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDLabel:
+                text: "Sistema Integrado de Gestão de Água e Esgoto"
+                halign: "center"
+                font_style: "Caption"
+                theme_text_color: "Custom"
+                text_color: 0.4, 0.4, 0.4, 1
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDLabel:
+                id: texto_nome_empresa
+                text: ""
+                halign: "center"
+                bold: True
+                theme_text_color: "Custom"
+                text_color: 0.03, 0.4, 0.5, 1
+                size_hint_y: None
+                height: self.texture_size[1] + dp(4) if self.text else 0
+
+            MDLabel:
+                text: "Área do morador"
+                halign: "center"
+                theme_text_color: "Custom"
+                text_color: 0.3, 0.3, 0.3, 1
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            Widget:
+                size_hint_y: None
+                height: "16dp"
+
+            MDLabel:
+                text: "Telefone"
+                theme_text_color: "Custom"
+                text_color: 0.2, 0.2, 0.2, 1
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            TextInput:
+                id: campo_telefone
+                size_hint_y: None
+                height: "38dp"
+                multiline: False
+                background_color: 1, 1, 1, 1
+                foreground_color: 0, 0, 0, 1
+                padding: [10, 8, 10, 8]
+
+            Widget:
+                size_hint_y: None
+                height: "8dp"
+
+            MDLabel:
+                text: "Senha"
+                theme_text_color: "Custom"
+                text_color: 0.2, 0.2, 0.2, 1
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            TextInput:
+                id: campo_senha
+                size_hint_y: None
+                height: "38dp"
+                multiline: False
+                password: True
+                background_color: 1, 1, 1, 1
+                foreground_color: 0, 0, 0, 1
+                padding: [10, 8, 10, 8]
+
+            Widget:
+                size_hint_y: None
+                height: "16dp"
+
+            MDRaisedButton:
+                id: botao_entrar
+                text: "Entrar"
+                size_hint_x: 1
+                md_bg_color: 0.043, 0.165, 0.357, 1
+                on_release: root.entrar(campo_telefone.text, campo_senha.text)
+
+            MDFlatButton:
+                text: "Ainda não tenho conta — Criar conta"
+                pos_hint: {"center_x": 0.5}
+                on_release: setattr(root.manager, "current", "cadastro")
+
+
+<TelaCadastro>:
+    name: "cadastro"
+    ScrollView:
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: "30dp"
+            spacing: "12dp"
+            adaptive_height: True
+
+            MDLabel:
+                text: "Criar conta"
+                font_style: "H5"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDTextField:
+                id: campo_nome
+                hint_text: "Seu nome completo"
+
+            MDTextField:
+                id: campo_telefone
+                hint_text: "Telefone"
+
+            MDTextField:
+                id: campo_senha
+                hint_text: "Senha"
+                password: True
+
+            MDTextField:
+                id: campo_confirmar
+                hint_text: "Confirme a senha"
+                password: True
+
+            MDRaisedButton:
+                id: botao_criar
+                text: "CRIAR CONTA"
+                pos_hint: {"center_x": 0.5}
+                md_bg_color: 0.043, 0.165, 0.357, 1
+                on_release: root.criar_conta(campo_nome.text, campo_telefone.text, campo_senha.text, campo_confirmar.text)
+
+            MDFlatButton:
+                text: "Já tenho conta — VOLTAR"
+                pos_hint: {"center_x": 0.5}
+                on_release: setattr(root.manager, "current", "login")
+
+
+<TelaPerfil>:
+    name: "perfil"
+    ScrollView:
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: "30dp"
+            spacing: "12dp"
+            adaptive_height: True
+
+            MDLabel:
+                text: "Complete seu cadastro"
+                font_style: "H5"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDLabel:
+                text: "Precisamos do seu endereço pra atender chamados"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDTextField:
+                id: campo_nome
+                hint_text: "Nome completo"
+
+            MDTextField:
+                id: campo_endereco
+                hint_text: "Endereço (rua, número)"
+
+            MDTextField:
+                id: campo_bairro
+                hint_text: "Bairro"
+
+            MDTextField:
+                id: campo_cidade
+                hint_text: "Cidade"
+                text: "Conceição de Ipanema"
+
+            MDTextField:
+                id: campo_hidrometro
+                hint_text: "Número do hidrômetro (se souber)"
+
+            MDLabel:
+                text: "Sua unidade de atendimento:"
+                theme_text_color: "Custom"
+                text_color: 0.2, 0.2, 0.2, 1
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            Spinner:
+                id: spinner_localidade
+                text: "sede"
+                values: ["sede", "penha_do_coco", "bananal", "agua_limpa"]
+                size_hint_y: None
+                height: "44dp"
+
+            MDLabel:
+                text: "Categoria do imóvel:"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            Spinner:
+                id: spinner_categoria
+                text: "residencial"
+                values: ["residencial", "comercial", "industrial"]
+                size_hint_y: None
+                height: "48dp"
+
+            MDRaisedButton:
+                id: botao_salvar
+                text: "SALVAR"
+                pos_hint: {"center_x": 0.5}
+                md_bg_color: 0.09, 0.64, 0.29, 1
+                on_release: root.salvar(campo_nome.text, campo_endereco.text, campo_bairro.text, campo_cidade.text, campo_hidrometro.text, spinner_categoria.text, spinner_localidade.text)
+
+
+<TelaHome>:
+    name: "home"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 0.961, 0.973, 0.988, 1
+
+        MDTopAppBar:
+            title: "SAAE de Chalé"
+            md_bg_color: 0.043, 0.165, 0.357, 1
+            right_action_items: [["logout", lambda x: root.sair()]]
+
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                adaptive_height: True
+                padding: dp(16)
+                spacing: dp(12)
+
+                Image:
+                    source: "assets/logo_saae.png"
+                    size_hint_y: None
+                    height: dp(56)
+                MDLabel:
+                    id: aviso_pendente
+                    text: ""
+                    halign: "center"
+                    theme_text_color: "Custom"
+                    text_color: 0.7, 0.4, 0.05, 1
+                    size_hint_y: None
+                    height: self.texture_size[1] + dp(16) if self.text else 0
+                    text_size: self.width - dp(20), None
+
+                MDLabel:
+                    id: aviso_leitura
+                    text: ""
+                    halign: "center"
+                    theme_text_color: "Custom"
+                    text_color: 0.043, 0.165, 0.357, 1
+                    size_hint_y: None
+                    height: self.texture_size[1] + dp(16) if self.text else 0
+                    text_size: self.width - dp(20), None
+
+                AvisoCartao:
+                    texto: "Água é vida: cuidar dela é cuidar de cada família de Chalé."
+                    info: "SAAE DE CHALÉ"
+                MDLabel:
+                    id: texto_saudacao
+                    text: ""
+                    halign: "center"
+                    font_style: "H5"
+                    bold: True
+                    theme_text_color: "Custom"
+                    text_color: 0.114, 0.435, 0.82, 1
+                    size_hint_y: None
+                    height: self.texture_size[1] + dp(6)
+                MDLabel:
+                    text: "Informe o serviço desejado:"
+                    halign: "center"
+                    font_style: "Body2"
+                    theme_text_color: "Custom"
+                    text_color: 0.35, 0.40, 0.48, 1
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                MDGridLayout:
+                    cols: 2
+                    adaptive_height: True
+                    spacing: dp(10)
+                    CartaoAcao:
+                        icone: "alert-circle"
+                        titulo: "Abrir chamado"
+                        texto: "Vazamento, esgoto, falta de água"
+                        on_release: root.ir_abrir_chamado()
+                    CartaoAcao:
+                        icone: "clipboard-text"
+                        titulo: "Meus chamados"
+                        texto: "Acompanhe o andamento"
+                        on_release: root.ir_meus_chamados()
+                    CartaoAcao:
+                        icone: "gauge"
+                        titulo: "Leitura do hidrômetro"
+                        texto: "Envie a foto do medidor"
+                        on_release: root.ir_leitura_hidrometro()
+                    CartaoAcao:
+                        icone: "receipt"
+                        titulo: "Minhas faturas"
+                        texto: "Valores e vencimentos"
+                        on_release: root.ir_minhas_faturas()
+        RodapeSiga:
+
+
+<TelaAbrirChamado>:
+    name: "abrir_chamado"
+    MDBoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "Novo chamado"
+            md_bg_color: 0.043, 0.165, 0.357, 1
+            left_action_items: [["arrow-left", lambda x: setattr(root.manager, "current", "home")]]
+
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: "25dp"
+            spacing: "15dp"
+
+            MDLabel:
+                text: "Tipo de problema:"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            Spinner:
+                id: spinner_tipo
+                text: "Selecione"
+                values: ["vazamento", "manutencao", "religacao", "vistoria", "outro"]
+                size_hint_y: None
+                height: "48dp"
+
+            MDLabel:
+                text: "Prioridade:"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            Spinner:
+                id: spinner_prioridade
+                text: "Selecione"
+                values: ["baixa", "normal", "alta", "urgente"]
+                size_hint_y: None
+                height: "48dp"
+
+            MDTextField:
+                id: campo_descricao
+                hint_text: "Descreva o problema"
+                multiline: True
+
+            MDRaisedButton:
+                id: botao_abrir
+                text: "ABRIR CHAMADO"
+                pos_hint: {"center_x": 0.5}
+                md_bg_color: 0.86, 0.15, 0.15, 1
+                on_release: root.abrir(spinner_tipo.text, campo_descricao.text, spinner_prioridade.text)
+
+
+<TelaMeusChamados>:
+    name: "meus_chamados"
+    MDBoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "Meus chamados"
+            md_bg_color: 0.043, 0.165, 0.357, 1
+            left_action_items: [["arrow-left", lambda x: setattr(root.manager, "current", "home")]]
+            right_action_items: [["refresh", lambda x: root.carregar()]]
+
+        ScrollView:
+            MDList:
+                id: lista_meus_chamados
+
+
+<TelaLeituraHidrometro>:
+    name: "leitura_hidrometro"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 1, 1, 1, 1
+
+        MDTopAppBar:
+            title: "Informação do medidor"
+            md_bg_color: 0.043, 0.165, 0.357, 1
+            left_action_items: [["arrow-left", lambda x: setattr(root.manager, "current", "home")]]
+
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: "25dp"
+            spacing: "12dp"
+
+            MDBoxLayout:
+                orientation: "horizontal"
+                size_hint_y: None
+                height: "56dp"
+                spacing: "10dp"
+
+                MDBoxLayout:
+                    orientation: "vertical"
+                    MDLabel:
+                        text: "Mês de referência"
+                        font_style: "Caption"
+                        theme_text_color: "Custom"
+                        text_color: 0.55, 0.55, 0.55, 1
+                    MDLabel:
+                        id: valor_mes_referencia
+                        text: "—"
+                        bold: True
+
+                MDBoxLayout:
+                    orientation: "vertical"
+                    MDLabel:
+                        text: "Período para leitura"
+                        font_style: "Caption"
+                        theme_text_color: "Custom"
+                        text_color: 0.55, 0.55, 0.55, 1
+                    MDLabel:
+                        id: valor_periodo
+                        text: "—"
+                        bold: True
+
+                MDBoxLayout:
+                    orientation: "vertical"
+                    MDLabel:
+                        text: "Última leitura"
+                        font_style: "Caption"
+                        theme_text_color: "Custom"
+                        text_color: 0.55, 0.55, 0.55, 1
+                    MDLabel:
+                        id: valor_ultima_leitura
+                        text: "—"
+                        bold: True
+
+            MDSeparator:
+
+            Widget:
+                size_hint_y: None
+                height: "10dp"
+
+            MDLabel:
+                text: "Leitura do hidrômetro"
+                font_style: "Subtitle2"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDTextField:
+                id: campo_valor
+                hint_text: "Digite apenas números"
+                input_filter: "float"
+                mode: "fill"
+                fill_color: 0.95, 0.95, 0.95, 1
+
+            Widget:
+                size_hint_y: None
+                height: "6dp"
+
+            MDRaisedButton:
+                text: "TIRAR FOTO DO HIDRÔMETRO"
+                pos_hint: {"center_x": 0.5}
+                md_bg_color: 0.6, 0.6, 0.6, 1
+                on_release: root.tirar_foto()
+
+            MDLabel:
+                id: texto_foto
+                text: "Nenhuma foto tirada ainda"
+                halign: "center"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDLabel:
+                text: "Não é possível reenviar a mesma foto em outra leitura — tire sempre uma foto nova."
+                halign: "center"
+                theme_text_color: "Custom"
+                text_color: 0.5, 0.5, 0.5, 1
+                font_style: "Caption"
+                size_hint_y: None
+                height: self.texture_size[1]
+                text_size: self.width, None
+
+            Widget:
+
+            MDBoxLayout:
+                orientation: "horizontal"
+                spacing: "12dp"
+                size_hint_y: None
+                height: "48dp"
+
+                MDFlatButton:
+                    text: "Voltar"
+                    size_hint_x: 0.5
+                    theme_text_color: "Custom"
+                    text_color: 0.043, 0.165, 0.357, 1
+                    md_bg_color: 1, 1, 1, 1
+                    line_color: 0.043, 0.165, 0.357, 1
+                    on_release: setattr(root.manager, "current", "home")
+
+                MDRaisedButton:
+                    id: botao_enviar
+                    text: "Avançar"
+                    size_hint_x: 0.5
+                    md_bg_color: 0.043, 0.165, 0.357, 1
+                    on_release: root.enviar(campo_valor.text)
+
+
+<TelaMinhasFaturas>:
+    name: "minhas_faturas"
+    MDBoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "Minhas faturas"
+            md_bg_color: 0.043, 0.165, 0.357, 1
+            left_action_items: [["arrow-left", lambda x: setattr(root.manager, "current", "home")]]
+            right_action_items: [["refresh", lambda x: root.carregar()]]
+
+        ScrollView:
+            MDList:
+                id: lista_minhas_faturas

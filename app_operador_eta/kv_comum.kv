@@ -1,0 +1,180 @@
+#:import dp kivy.metrics.dp
+
+<Cabecalho@MDBoxLayout>:
+    titulo: ""
+    subtitulo: ""
+    size_hint_y: None
+    height: dp(64)
+    padding: dp(12), dp(6)
+    spacing: dp(10)
+    md_bg_color: app.c_marinho
+    MDBoxLayout:
+        size_hint: None, None
+        size: (dp(112), dp(40)) if app.logo else (0, 0)
+        pos_hint: {"center_y": 0.5}
+        md_bg_color: 1, 1, 1, 1
+        radius: [dp(8)]
+        padding: dp(6), dp(3)
+        opacity: 1 if app.logo else 0
+        Image:
+            source: app.logo
+            allow_stretch: True
+    Image:
+        source: app.brasao
+        size_hint: None, None
+        size: (dp(44), dp(44)) if app.brasao else (0, 0)
+        pos_hint: {"center_y": 0.5}
+    MDBoxLayout:
+        orientation: "vertical"
+        MDLabel:
+            text: root.titulo
+            bold: True
+            font_style: "H6"
+            theme_text_color: "Custom"
+            text_color: 1, 1, 1, 1
+            shorten: True
+        MDLabel:
+            text: root.subtitulo
+            font_style: "Caption"
+            theme_text_color: "Custom"
+            text_color: 0.82, 0.88, 0.97, 1
+            shorten: True
+
+<Rotulo@MDLabel>:
+    theme_text_color: "Custom"
+    text_color: app.c_texto
+    size_hint_y: None
+    height: self.texture_size[1] + dp(6)
+
+<Campo@MDTextField>:
+    mode: "rectangle"
+    text_color_normal: app.c_escuro
+    line_color_focus: app.c_marinho
+    text_color_focus: app.c_escuro
+    size_hint_y: None
+    height: dp(56)
+
+<CampoNum@MDTextField>:
+    mode: "rectangle"
+    text_color_normal: app.c_escuro
+    input_filter: "float"
+    input_type: "number"
+    line_color_focus: app.c_marinho
+    text_color_focus: app.c_escuro
+    size_hint_y: None
+    height: dp(56)
+
+<BotaoPrimario@MDRaisedButton>:
+    md_bg_color: app.c_marinho
+    theme_text_color: "Custom"
+    text_color: 1, 1, 1, 1
+    size_hint_x: 1
+    elevation: 0
+
+<BotaoSecundario@MDFlatButton>:
+    theme_text_color: "Custom"
+    text_color: app.c_marinho
+    size_hint_x: 1
+
+<MDTopAppBar>:
+    elevation: 0
+
+<Seletor@Spinner>:
+    size_hint_y: None
+    height: dp(48)
+    background_normal: ""
+    background_down: ""
+    background_color: 1, 1, 1, 1
+    color: app.c_escuro
+    canvas.after:
+        Color:
+            rgba: 0.82, 0.85, 0.89, 1
+        Line:
+            rounded_rectangle: self.x, self.y, self.width, self.height, dp(8)
+            width: 1
+
+<Etiqueta2@MDLabel>:
+    font_style: "Caption"
+    bold: True
+    theme_text_color: "Custom"
+    text_color: app.c_texto
+    size_hint_y: None
+    height: self.texture_size[1] + dp(4)
+
+<Cartao@MDBoxLayout>:
+    orientation: "vertical"
+    adaptive_height: True
+    padding: dp(14)
+    spacing: dp(6)
+    md_bg_color: 1, 1, 1, 1
+    radius: [dp(12)]
+    canvas.after:
+        Color:
+            rgba: 0.82, 0.85, 0.89, 1
+        Line:
+            rounded_rectangle: self.x, self.y, self.width, self.height, dp(12)
+            width: 1
+
+<TelaLogin>:
+    name: "login"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: app.c_fundo
+        Cabecalho:
+            titulo: "SAAE Chalé - MG"
+            subtitulo: app.nome_app
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                adaptive_height: True
+                padding: dp(24)
+                spacing: dp(12)
+                Widget:
+                    size_hint_y: None
+                    height: dp(12)
+                Rotulo:
+                    text: "Entrar"
+                    font_style: "H5"
+                    bold: True
+                    text_color: app.c_escuro
+                Campo:
+                    id: ident
+                    hint_text: "Telefone ou e-mail"
+                Campo:
+                    id: senha
+                    hint_text: "Senha"
+                    password: True
+                Rotulo:
+                    id: msg
+                    text: ""
+                    text_color: app.c_vermelho
+                BotaoPrimario:
+                    text: "ENTRAR"
+                    on_release: root.entrar()
+                BotaoSecundario:
+                    text: "ESQUECI MINHA SENHA"
+                    on_release: root.abrir_esqueci_senha()
+                BotaoSecundario:
+                    text: "AINDA NÃO TENHO CONTA - CRIAR CONTA"
+                    size_hint_y: None
+                    height: dp(36) if root.permite_cadastro else 0
+                    opacity: 1 if root.permite_cadastro else 0
+                    disabled: not root.permite_cadastro
+                    on_release: root.abrir_cadastro()
+                BotaoSecundario:
+                    text: "Servidor: " + app.url_api
+                    font_size: "11sp"
+                    on_release: root.alternar_servidor()
+                Campo:
+                    id: servidor
+                    hint_text: "http://ip-do-servidor:8000"
+                    opacity: 0
+                    disabled: True
+                    height: 0
+                BotaoSecundario:
+                    id: salvar_servidor
+                    text: "Salvar endereço"
+                    opacity: 0
+                    disabled: True
+                    height: 0
+                    on_release: root.salvar_servidor()

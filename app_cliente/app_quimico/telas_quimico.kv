@@ -1,0 +1,359 @@
+ScreenManager:
+    TelaLogin:
+    TelaHome:
+    TelaAmostras:
+    TelaNovaColeta:
+    TelaDetalhe:
+    TelaPontos:
+    TelaLaudos:
+
+<TelaHome>:
+    name: "home"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 1, 1, 1, 1
+        Cabecalho:
+            id: cab
+        MDGridLayout:
+            cols: 4
+            size_hint_y: None
+            height: dp(44)
+            padding: dp(8), 0
+            BotaoSecundario:
+                text: "Sede"
+                font_size: "11sp"
+                on_release: root.escolher("sede")
+            BotaoSecundario:
+                text: "P. do Coco"
+                font_size: "11sp"
+                on_release: root.escolher("penha_do_coco")
+            BotaoSecundario:
+                text: "Bananal"
+                font_size: "11sp"
+                on_release: root.escolher("bananal")
+            BotaoSecundario:
+                text: "Á. Limpa"
+                font_size: "11sp"
+                on_release: root.escolher("agua_limpa")
+        Rotulo:
+            id: resumo
+            text: ""
+            font_style: "Caption"
+            padding: dp(14), 0
+        Rotulo:
+            id: alertas
+            text: ""
+            font_style: "Caption"
+            text_color: app.c_vermelho
+            padding: dp(14), 0
+        ScrollView:
+            MDList:
+                id: lista
+        MDGridLayout:
+            cols: 2
+            size_hint_y: None
+            height: dp(100)
+            padding: dp(8)
+            spacing: dp(6)
+            BotaoPrimario:
+                text: "NOVA COLETA"
+                on_release: root.manager.current = "nova"
+            BotaoPrimario:
+                text: "AMOSTRAS"
+                on_release: root.manager.current = "amostras"
+            BotaoSecundario:
+                text: "Laudos externos"
+                on_release: root.manager.current = "laudos"
+            BotaoSecundario:
+                text: "Pontos de coleta"
+                on_release: root.manager.current = "pontos"
+        MDBoxLayout:
+            size_hint_y: None
+            height: dp(40)
+            padding: dp(8), 0
+            BotaoSecundario:
+                text: "Atualizar"
+                on_release: root.carregar()
+            BotaoSecundario:
+                text: "Sair"
+                on_release: root.sair()
+
+<TelaAmostras>:
+    name: "amostras"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 1, 1, 1, 1
+        Cabecalho:
+            titulo: "Amostras"
+            subtitulo: "Pendentes primeiro (recoletas)"
+        Rotulo:
+            id: msg
+            text: ""
+            padding: dp(14), 0
+        ScrollView:
+            MDList:
+                id: lista
+        BotaoSecundario:
+            text: "Voltar"
+            on_release: root.manager.current = "home"
+
+<TelaNovaColeta>:
+    name: "nova"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 1, 1, 1, 1
+        Cabecalho:
+            titulo: "Nova coleta"
+            subtitulo: "Supervisão da coleta de amostra"
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                adaptive_height: True
+                padding: dp(16)
+                spacing: dp(8)
+                Rotulo:
+                    id: escolhido
+                    text: ""
+                    bold: True
+                    text_color: app.c_escuro
+                MDBoxLayout:
+                    orientation: "vertical"
+                    adaptive_height: True
+                    MDList:
+                        id: lista
+                        size_hint_y: None
+                        height: min(self.minimum_height, dp(200))
+                MDBoxLayout:
+                    id: grupos
+                    orientation: "vertical"
+                    adaptive_height: True
+                Rotulo:
+                    id: grupo_escolhido
+                    text: ""
+                    text_color: app.c_escuro
+                CampoNum:
+                    id: cloro
+                    hint_text: "Cloro residual (mg/L) — no ato da coleta"
+                CampoNum:
+                    id: cor
+                    hint_text: "Cor aparente (uH)"
+                CampoNum:
+                    id: turbidez
+                    hint_text: "Turbidez (NTU)"
+                Campo:
+                    id: obs
+                    hint_text: "Observações"
+                Rotulo:
+                    id: msg
+                    text: ""
+                    text_color: app.c_vermelho
+                BotaoPrimario:
+                    text: "REGISTRAR COLETA"
+                    on_release: root.registrar()
+                BotaoSecundario:
+                    text: "Voltar"
+                    on_release: root.manager.current = "home"
+
+<TelaDetalhe>:
+    name: "detalhe"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 1, 1, 1, 1
+        Cabecalho:
+            titulo: "Amostra"
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                adaptive_height: True
+                padding: dp(16)
+                spacing: dp(8)
+                Rotulo:
+                    id: titulo
+                    text: ""
+                    bold: True
+                    text_color: app.c_escuro
+                Rotulo:
+                    id: status
+                    text: ""
+                Rotulo:
+                    id: info
+                    text: ""
+                    font_style: "Caption"
+                    height: self.texture_size[1] + dp(14)
+                MDBoxLayout:
+                    id: bloco_coleta
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: dp(250)
+                    spacing: dp(8)
+                    Rotulo:
+                        text: "Registrar a coleta desta amostra"
+                        bold: True
+                    CampoNum:
+                        id: cloro
+                        hint_text: "Cloro residual (mg/L)"
+                    CampoNum:
+                        id: cor
+                        hint_text: "Cor aparente (uH)"
+                    CampoNum:
+                        id: turbidez
+                        hint_text: "Turbidez (NTU)"
+                    BotaoPrimario:
+                        text: "REGISTRAR COLETA"
+                        on_release: root.salvar_coleta()
+                MDBoxLayout:
+                    id: bloco_bact
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: dp(270)
+                    spacing: dp(8)
+                    Rotulo:
+                        text: "Leitura do kit/estufa"
+                        bold: True
+                    BotaoSecundario:
+                        id: bt_ct
+                        text: ""
+                        on_release: root.alternar("ct")
+                    BotaoSecundario:
+                        id: bt_ec
+                        text: ""
+                        on_release: root.alternar("ec")
+                    Campo:
+                        id: metodo
+                        hint_text: "Método / kit (ex.: Colilert)"
+                    Campo:
+                        id: lote
+                        hint_text: "Lote do kit"
+                    BotaoPrimario:
+                        text: "LANÇAR RESULTADO"
+                        on_release: root.salvar_resultado()
+                MDBoxLayout:
+                    id: bloco_nmp
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: dp(130)
+                    spacing: dp(8)
+                    CampoNum:
+                        id: nmp
+                        hint_text: "E. coli (NMP/100 mL)"
+                    BotaoPrimario:
+                        text: "LANÇAR RESULTADO"
+                        on_release: root.salvar_resultado()
+                MDBoxLayout:
+                    id: bloco_cel
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: dp(130)
+                    spacing: dp(8)
+                    CampoNum:
+                        id: cel
+                        hint_text: "Cianobactérias (células/mL)"
+                    BotaoPrimario:
+                        text: "LANÇAR RESULTADO"
+                        on_release: root.salvar_resultado()
+                MDBoxLayout:
+                    id: bloco_encaminhar
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: dp(70)
+                    spacing: dp(8)
+                    BotaoPrimario:
+                        text: "MARCAR COMO ENCAMINHADA AO LABORATÓRIO"
+                        on_release: root.encaminhar()
+                Rotulo:
+                    id: msg
+                    text: ""
+                    text_color: app.c_vermelho
+                BotaoSecundario:
+                    text: "Voltar às amostras"
+                    on_release: root.manager.current = "amostras"
+
+<TelaPontos>:
+    name: "pontos"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 1, 1, 1, 1
+        Cabecalho:
+            titulo: "Pontos de coleta"
+            subtitulo: "Captação, saída da ETA, reservatórios e rede"
+        MDBoxLayout:
+            orientation: "vertical"
+            adaptive_height: True
+            padding: dp(16)
+            spacing: dp(8)
+            BotaoSecundario:
+                id: bt_tipo
+                text: ""
+                on_release: root.trocar_tipo()
+            Campo:
+                id: nome
+                hint_text: "Nome do ponto (ex.: Escola Municipal)"
+            Rotulo:
+                id: msg
+                text: ""
+                text_color: app.c_vermelho
+            BotaoPrimario:
+                text: "CADASTRAR PONTO"
+                on_release: root.salvar()
+        ScrollView:
+            MDList:
+                id: lista
+        BotaoSecundario:
+            text: "Voltar"
+            on_release: root.manager.current = "home"
+
+<TelaLaudos>:
+    name: "laudos"
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 1, 1, 1, 1
+        Cabecalho:
+            titulo: "Laudos do laboratório externo"
+            subtitulo: "Viçosa — registre e anexe o arquivo"
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                adaptive_height: True
+                padding: dp(16)
+                spacing: dp(8)
+                BotaoSecundario:
+                    id: bt_tipo
+                    text: ""
+                    on_release: root.trocar_tipo()
+                Campo:
+                    id: lab
+                    hint_text: "Laboratório"
+                Campo:
+                    id: numero
+                    hint_text: "Nº do laudo"
+                Campo:
+                    id: data_coleta
+                    hint_text: "Data da coleta (dd/mm/aaaa)"
+                Campo:
+                    id: obs
+                    hint_text: "Observações / resumo"
+                BotaoSecundario:
+                    text: "ANEXAR ARQUIVO (PDF ou foto)"
+                    on_release: root.escolher_arquivo()
+                Rotulo:
+                    id: arquivo
+                    text: ""
+                    font_style: "Caption"
+                Rotulo:
+                    id: msg
+                    text: ""
+                    text_color: app.c_vermelho
+                BotaoPrimario:
+                    text: "REGISTRAR LAUDO"
+                    on_release: root.enviar()
+                Rotulo:
+                    text: "Laudos já registrados"
+                    bold: True
+                    text_color: app.c_escuro
+                MDList:
+                    id: lista
+                    size_hint_y: None
+                    height: self.minimum_height
+        BotaoSecundario:
+            text: "Voltar"
+            on_release: root.manager.current = "home"

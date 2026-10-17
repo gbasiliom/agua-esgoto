@@ -1,0 +1,19 @@
+# Segredos — NUNCA versionar
+.env
+*.env
+.chave_criptografia_local
+.secret_key_local
+# Dados locais
+*.db
+backend/uploads/
+backend/dados_laudos/
+# Python / build
+venv/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+build/
+dist/
+.buildozer/
+bin/

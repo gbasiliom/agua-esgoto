@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Esboço — Qualidade da Água</title>
+<style>
+:root{--az:#0B2A5B;--az2:#071B3B;--clr:#E8F0FA;--lin:#D1D9E3;--tx:#1b2a41;--mut:#4A5668;--ok:#07754A;--am:#B57308;--er:#B52417}
+*{box-sizing:border-box}body{margin:0;font:14px/1.45 "Segoe UI",system-ui,sans-serif;color:var(--tx);background:#fff}
+.app{display:grid;grid-template-columns:190px 1fr;min-height:100vh}
+.side{background:var(--az);color:#fff;padding:22px 12px}
+.side h1{font-size:15px;margin:0 6px 22px;line-height:1.3}.side small{display:block;font-weight:400;opacity:.7}
+.side a{display:block;padding:8px 10px;border-radius:6px;color:#dbe6f7;margin-bottom:2px}
+.side a.on{background:rgba(255,255,255,.14);color:#fff;font-weight:600}
+main{padding:24px 28px;max-width:1100px}
+.top{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+.top h2{margin:0;font-size:20px;color:var(--az2);margin-right:auto}
+select,button{font:inherit;border:1px solid var(--lin);background:#fff;border-radius:6px;padding:7px 11px;color:var(--tx)}
+button.p{background:var(--az);color:#fff;border-color:var(--az)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--lin);margin-bottom:18px}
+.tabs span{padding:9px 14px;color:var(--mut);border-bottom:2px solid transparent}
+.tabs .on{color:var(--az);border-color:var(--az);font-weight:600}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.card{border:1px solid var(--lin);border-radius:8px;padding:12px 14px}
+.card .l{color:var(--mut);font-size:12px}.card .v{font-size:22px;font-weight:600;color:var(--az2)}
+.card .s{font-size:12px;margin-top:2px}
+.ok{color:var(--ok)}.am{color:var(--am)}.er{color:var(--er)}
+.alert{border-left:3px solid var(--er);background:#fdf3f2;padding:10px 12px;border-radius:0 6px 6px 0;margin-bottom:8px;font-size:13px}
+.alert.a{border-color:var(--am);background:#fdf8ee}
+h3{font-size:14px;margin:22px 0 8px;color:var(--az2)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:12px;font-weight:600;color:var(--mut);padding:8px 10px;border-bottom:1px solid var(--lin);background:var(--clr)}
+td{padding:9px 10px;border-bottom:1px solid #edf0f4;vertical-align:middle}
+.bar{height:6px;background:#e7ecf3;border-radius:3px;width:120px;display:inline-block;vertical-align:middle;margin-right:8px}
+.bar i{display:block;height:100%;border-radius:3px}
+.tag{font-size:12px;padding:2px 8px;border-radius:10px;border:1px solid}
+.tag.ok{background:#eaf6f0;border-color:#b8dfcb}.tag.am{background:#fcf3df;border-color:#ecd49a}.tag.er{background:#fbeae8;border-color:#eec0bb}
+.note{color:var(--mut);font-size:12px;margin-top:14px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:800px){.app{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}}
+</style></head><body>
+<div class="app">
+<nav class="side"><h1>SAAE Chalé<small>SIGA — Painel do Operador</small></h1>
+<a>Dashboard</a><a>Chamados</a><a>Clientes</a><a>Estoque</a><a>Leituras</a><a>Faturamento</a><a>Financeiro</a><a class="on">Qualidade da Água</a><a>Licitações</a><a>Solicitações</a><a>Funcionários</a></nav>
+<main>
+<div class="top"><h2>Qualidade da Água</h2>
+<select><option>Sede</option><option>Penha do Coco</option><option>Bananal</option><option>Água Limpa</option></select>
+<select><option>Outubro / 2026</option></select><button class="p">Relatório mensal (PDF)</button></div>
+<div class="tabs"><span class="on">Conformidade</span><span>Coletas e resultados</span><span>Laudos</span><span>Pontos e regras</span></div>
+
+<div class="cards">
+<div class="card"><div class="l">Plano do mês cumprido</div><div class="v">86%</div><div class="s am">2 itens em andamento</div></div>
+<div class="card"><div class="l">Rede (coliformes / E. coli)</div><div class="v ok">Conforme</div><div class="s">5 de 5 amostras · 0 positivas</div></div>
+<div class="card"><div class="l">Recoletas pendentes</div><div class="v er">1</div><div class="s er">1 atrasada (Art. 27)</div></div>
+<div class="card"><div class="l">E. coli captação (média geom. 12m)</div><div class="v">412</div><div class="s ok">abaixo de 1.000</div></div>
+</div>
+
+<div class="alert">Há recoleta ATRASADA após resultado positivo (Art. 27) — ponto “Rede – Rua Principal”, prevista 12/10.</div>
+<div class="alert a">Turbidez pós-filtro: faltam 2 análises para fechar a semana atual.</div>
+
+<h3>Exigido × realizado no mês</h3>
+<table><tr><th>Parâmetro</th><th>Onde</th><th>Frequência</th><th>Realizado</th><th>Situação</th></tr>
+<tr><td>Cloro residual livre</td><td>Rede</td><td>Mensal</td><td><span class="bar"><i style="width:100%;background:var(--ok)"></i></span>5 / 5</td><td><span class="tag ok">Cumprido</span></td></tr>
+<tr><td>Coliformes totais e E. coli</td><td>Rede</td><td>Mensal</td><td><span class="bar"><i style="width:100%;background:var(--ok)"></i></span>5 / 5</td><td><span class="tag ok">Cumprido</span></td></tr>
+<tr><td>Turbidez pós-filtração</td><td>ETA</td><td>Semanal</td><td><span class="bar"><i style="width:75%;background:var(--am)"></i></span>3 / 4</td><td><span class="tag am">Em andamento</span></td></tr>
+<tr><td>Fluoreto</td><td>Saída da ETA</td><td>Mensal</td><td><span class="bar"><i style="width:0%;background:var(--er)"></i></span>0 / 1</td><td><span class="tag am">Em andamento</span></td></tr>
+<tr><td>Cianobactérias</td><td>Captação</td><td>Mensal</td><td><span class="bar"><i style="width:100%;background:var(--ok)"></i></span>1 / 1</td><td><span class="tag ok">Cumprido</span></td></tr>
+<tr><td>Recoleta de coliformes</td><td>Rede</td><td>Em até 24 h</td><td><span class="bar"><i style="width:0%;background:var(--er)"></i></span>0 / 1</td><td><span class="tag er">Atrasada</span></td></tr>
+</table>
+<p class="note">Dados de exemplo. Na versão real, cada linha abre o detalhe das janelas pendentes e os valores vêm de <code>/qualidade/conformidade</code>.</p>
+</main></div></body></html>

@@ -1,0 +1,101 @@
+# Gera o APK do app "SIGA Operador ETA" (Android) no GitHub Actions.
+# Como usar: aba Actions > "APK - Operador ETA" > Run workflow. O APK aparece no fim da execução, em "Artifacts".
+name: APK - Operador ETA
+
+on:
+  workflow_dispatch:
+    inputs:
+      api_url:
+        description: "Endereço do servidor (ex.: https://api.seudominio.com.br ou http://IP:8000). Vazio = usa a variável API_BASE_URL do repositório ou o que está no config.py"
+        required: false
+        default: ""
+  push:
+    branches: [main]
+    paths:
+      - "app_operador_eta/**"
+      - "_comum/**"
+      - ".github/workflows/apk-operador-eta.yml"
+
+jobs:
+  apk:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 120
+    env:
+      APP_DIR: app_operador_eta
+      API_URL: ${{ inputs.api_url || vars.API_BASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Python 3.11 (a versão que o python-for-android espera)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Pacotes do sistema
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            git zip unzip openjdk-17-jdk autoconf automake libtool libltdl-dev pkg-config \
+            zlib1g-dev libncurses5-dev libncursesw5-dev cmake libffi-dev libssl-dev build-essential ccache
+          sudo apt-get install -y --no-install-recommends libtinfo5 || true
+
+      - name: Remover Pythons mais novos do cache da imagem (evita o buildozer pegar 3.12+)
+        run: |
+          # só depois do apt-get (o apt usa o Python do sistema). Não mexe em /usr/bin.
+          for d in /opt/hostedtoolcache/Python/3.1[2-9]* /opt/hostedtoolcache/PyPy; do
+            [ -e "$d" ] && sudo rm -rf "$d" && echo "removido $d" || true
+          done
+          python --version
+          which python python3
+
+      - name: Ferramentas de build (versões fixas)
+        run: |
+          python -m pip install --upgrade pip
+          pip install "buildozer==1.5.0" "cython==0.29.36" virtualenv setuptools
+
+      - name: Endereço do servidor dentro do app
+        run: |
+          if [ -n "$API_URL" ]; then
+            echo "Servidor do app: $API_URL"
+            sed -i "s#http://192.168.0.115:8000#${API_URL%/}#g" "$APP_DIR/config.py"
+            grep -n "http" "$APP_DIR/config.py" | head -3
+          else
+            echo "Sem endereço informado: o app usa o que já está no config.py"
+            grep -n "http" "$APP_DIR/config.py" | head -3
+          fi
+
+      - name: Cache do buildozer (SDK/NDK e receitas)
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.buildozer
+            ${{ env.APP_DIR }}/.buildozer
+          key: buildozer-${{ env.APP_DIR }}-${{ hashFiles(format('{0}/buildozer.spec', env.APP_DIR)) }}
+
+      - name: Aceitar licenças do Android SDK
+        run: |
+          mkdir -p ~/.buildozer/android/platform/android-sdk/licenses
+          cd ~/.buildozer/android/platform/android-sdk/licenses
+          printf "\n24333f8a63b6825ea9c5514f83c2829b004d1fee\n8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a6481e\n" > android-sdk-license
+          printf "\n84831b9409646a918e30573bab4c9c91346d8abd\n" > android-sdk-preview-license
+
+      - name: Gerar o APK (3 tentativas — downloads externos às vezes dão erro 502)
+        working-directory: ${{ env.APP_DIR }}
+        run: |
+          for tentativa in 1 2 3; do
+            echo "=== Tentativa $tentativa de 3 ==="
+            if buildozer -v android debug; then
+              exit 0
+            fi
+            echo "Falhou. Esperando 30 s antes de tentar de novo."
+            sleep 30
+          done
+          exit 1
+
+      - name: Guardar o APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: SIGA-OperadorETA-apk
+          path: ${{ env.APP_DIR }}/bin/*.apk
+          if-no-files-found: error
+          retention-days: 30

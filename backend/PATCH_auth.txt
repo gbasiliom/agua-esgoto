@@ -1,0 +1,21 @@
+=== No arquivo auth.py, ENCONTRE este trecho: ===
+
+import secrets
+
+_ARQUIVO_SECRET_KEY_RESERVA = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".secret_key_local")
+
+
+=== E SUBSTITUA por este: ===
+
+import sys
+import secrets
+
+
+def _pasta_persistente():
+    if getattr(sys, "frozen", False):
+        return os.path.dirname(sys.executable)
+    return os.path.dirname(os.path.abspath(__file__))
+
+
+_ARQUIVO_SECRET_KEY_RESERVA = os.path.join(_pasta_persistente(), ".secret_key_local")
+

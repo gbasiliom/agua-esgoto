@@ -1,0 +1,175 @@
+#:import dp kivy.metrics.dp
+# Peças de layout no estilo "Acordes de Davi": cartão de aviso com faixa lateral, título em duas cores,
+# cartões de ação (ícone + título + texto + etiqueta) e rodapé fino. Cores em literais para servir
+# também aos apps que não usam a base comum (técnico e cliente).
+# marinho 0.043,0.165,0.357 · destaque 0.114,0.435,0.82 · fundo 0.961,0.973,0.988
+
+<AvisoCartao@MDBoxLayout>:
+    texto: ""
+    info: ""
+    orientation: "horizontal"
+    adaptive_height: True
+    md_bg_color: 1, 1, 1, 1
+    radius: [dp(10)]
+    MDBoxLayout:
+        size_hint: None, 1
+        width: dp(4)
+        md_bg_color: 0.114, 0.435, 0.82, 1
+    MDBoxLayout:
+        orientation: "vertical"
+        adaptive_height: True
+        padding: dp(12), dp(10)
+        spacing: dp(2)
+        MDLabel:
+            text: root.texto
+            italic: True
+            halign: "center"
+            font_style: "Body2"
+            theme_text_color: "Custom"
+            text_color: 0.28, 0.33, 0.40, 1
+            size_hint_y: None
+            height: self.texture_size[1]
+        MDLabel:
+            text: root.info
+            bold: True
+            halign: "center"
+            font_style: "Caption"
+            theme_text_color: "Custom"
+            text_color: 0.043, 0.165, 0.357, 1
+            size_hint_y: None
+            height: self.texture_size[1] if self.text else 0
+
+<HeroTitulo@MDBoxLayout>:
+    prefixo: ""
+    destaque: ""
+    subtitulo: ""
+    orientation: "vertical"
+    adaptive_height: True
+    spacing: dp(4)
+    MDLabel:
+        text: "[b]" + root.prefixo + "[color=#1D6FD1]" + root.destaque + "[/color][/b]"
+        markup: True
+        halign: "center"
+        font_style: "H5"
+        theme_text_color: "Custom"
+        text_color: 0.106, 0.165, 0.255, 1
+        size_hint_y: None
+        height: self.texture_size[1] + dp(4)
+    MDLabel:
+        text: root.subtitulo
+        halign: "center"
+        font_style: "Body2"
+        theme_text_color: "Custom"
+        text_color: 0.35, 0.40, 0.48, 1
+        size_hint_y: None
+        height: self.texture_size[1] if self.text else 0
+
+<Etiqueta@MDBoxLayout>:
+    texto: ""
+    cor: 0.03, 0.46, 0.28, 1
+    fundo: 0.90, 0.96, 0.92, 1
+    size_hint: None, None
+    height: dp(22) if root.texto else 0
+    width: (lbl_et.texture_size[0] + dp(20)) if root.texto else 0
+    padding: dp(10), 0
+    md_bg_color: root.fundo
+    radius: [dp(11)]
+    opacity: 1 if root.texto else 0
+    MDLabel:
+        id: lbl_et
+        text: root.texto
+        bold: True
+        font_style: "Caption"
+        theme_text_color: "Custom"
+        text_color: root.cor
+        size_hint: None, None
+        size: self.texture_size[0], dp(22)
+
+<CartaoAcao@MDCard>:
+    icone: "water"
+    titulo: ""
+    texto: ""
+    etiqueta: ""
+    cor_etiqueta: 0.03, 0.46, 0.28, 1
+    fundo_etiqueta: 0.90, 0.96, 0.92, 1
+    orientation: "vertical"
+    style: "outlined"
+    md_bg_color: 1, 1, 1, 1
+    line_color: 0.82, 0.85, 0.89, 1
+    radius: [dp(12)]
+    padding: dp(10), dp(12)
+    spacing: dp(4)
+    size_hint_y: None
+    height: dp(122)
+    ripple_behavior: True
+    MDBoxLayout:
+        size_hint: None, None
+        size: dp(36), dp(36)
+        pos_hint: {"center_x": 0.5}
+        md_bg_color: 0.91, 0.94, 0.98, 1
+        radius: [dp(18)]
+        MDIcon:
+            icon: root.icone
+            halign: "center"
+            pos_hint: {"center_y": 0.5}
+            theme_text_color: "Custom"
+            text_color: 0.043, 0.165, 0.357, 1
+    MDLabel:
+        text: root.titulo
+        bold: True
+        halign: "center"
+        font_style: "Subtitle2"
+        theme_text_color: "Custom"
+        text_color: 0.106, 0.165, 0.255, 1
+        size_hint_y: None
+        height: self.texture_size[1]
+    MDLabel:
+        text: root.texto
+        halign: "center"
+        font_style: "Caption"
+        theme_text_color: "Custom"
+        text_color: 0.35, 0.40, 0.48, 1
+    Etiqueta:
+        texto: root.etiqueta
+        cor: root.cor_etiqueta
+        fundo: root.fundo_etiqueta
+        pos_hint: {"center_x": 0.5}
+
+<CartaoAcaoMini@MDCard>:
+    icone: "water"
+    titulo: ""
+    orientation: "horizontal"
+    style: "outlined"
+    md_bg_color: 1, 1, 1, 1
+    line_color: 0.82, 0.85, 0.89, 1
+    radius: [dp(10)]
+    padding: dp(10), dp(6)
+    spacing: dp(8)
+    size_hint_y: None
+    height: dp(52)
+    ripple_behavior: True
+    MDIcon:
+        icon: root.icone
+        size_hint_x: None
+        width: dp(28)
+        pos_hint: {"center_y": 0.5}
+        theme_text_color: "Custom"
+        text_color: 0.043, 0.165, 0.357, 1
+    MDLabel:
+        text: root.titulo
+        bold: True
+        font_style: "Subtitle2"
+        theme_text_color: "Custom"
+        text_color: 0.106, 0.165, 0.255, 1
+        valign: "center"
+
+<RodapeSiga@MDBoxLayout>:
+    size_hint_y: None
+    height: dp(28)
+    md_bg_color: 1, 1, 1, 1
+    MDLabel:
+        text: "SAAE de Chalé • SIGA"
+        halign: "center"
+        font_style: "Caption"
+        theme_text_color: "Custom"
+        text_color: 0.35, 0.40, 0.48, 1

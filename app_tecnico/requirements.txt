@@ -1,0 +1,4 @@
+kivy==2.1.0
+kivymd==1.2.0
+requests==2.32.3
+plyer==2.1.0

@@ -1,0 +1,26 @@
+name: Build APK - Cliente Água
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "ClienteAndroid/**"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build with Buildozer
+        uses: ArtemSBulgakov/buildozer-action@v1
+        with:
+          workdir: ClienteAndroid
+          buildozer_version: stable
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: cliente-agua-apk
+          path: ClienteAndroid/bin/*.apk
